@@ -13,7 +13,8 @@
   "dependencies": {
     "bluebird": "^2.9.2",
     "lodash": "^3.0.0",
-    "mori": "^0.3.2"
+    "mori": "^0.3.2",
+    "rot-js": "^0.5.2"
   },
   "devDependencies": {
     "watchify": "^2.2.1"

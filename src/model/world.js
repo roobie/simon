@@ -1,12 +1,28 @@
 
-var m = require('mori');
-var _ = require('lodash');
-var Engine = require('../event_loop/engine.js');
-var Scheduler = require('../event_loop/scheduler.js');
+var
+m = require('mori'),
+_ = require('lodash'),
+u = require('../util/all.js'),
+Engine = require('../event_loop/engine.js'),
+Scheduler = require('../event_loop/scheduler.js'),
+Map = require('./map.js'),
+entities = require('./entities.js');
 
 function World(properties) {
   this.initialise(properties);
 }
+
+Object.defineProperties(World, {
+    random: {
+    value: function() {
+      var map = Map.random();
+      return new World({
+        map: map,
+        entities: map.get_entities(),
+      });
+    }
+  }
+});
 
 Object.defineProperties(World.prototype, {
   initialise: {
@@ -23,26 +39,26 @@ Object.defineProperties(World.prototype, {
       }
 
       _.forEach(properties.entities, function(entity) {
-        schedu.add(entity, true);
+        entity.actor() && schedu.add(entity, entity.actor());
       });
 
-      _.assign({}, properties, {
+      _.assign(properties, {
         scheduler: schedu,
         engine: engine
       });
 
       _.forEach(properties, (function(value, key) {
         Object.defineProperty(this, key, {
-          value: value
+          value: u.prop(value)
         });
       }).bind(this));
 
-      engine.start();
     }
   },
 
   start: {
     value: function (properties) {
+      this.engine().start();
       return this;
     }
   }

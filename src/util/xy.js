@@ -1,6 +1,9 @@
 var prop = require('./prop.js');
 
 function xy(x, y) {
+  if (!(this instanceof xy)) {
+    return new xy(x, y);
+  }
   this.x = prop(x);
   this.y = prop(y);
 }
@@ -19,3 +22,5 @@ Object.keys(proto).forEach(function(key) {
     value: proto[key]
   });
 });
+
+module.exports = xy;
